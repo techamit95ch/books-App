@@ -3,8 +3,8 @@ import React from "react";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import { reducers } from "./reducers";
-import AsyncApp from "./AsyncApp";
+import { reducers } from "./src/reducers";
+import AsyncApp from "./src/AsyncApp";
 import { LogBox } from "react-native";
 
 export default function App() {

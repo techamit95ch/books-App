@@ -50,7 +50,8 @@ export default function AsyncApp({ navigation }) {
     <SafeAreaProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator
-          initialRouteName={user.isAuthenticated ? "Books" : "Login"}
+          initialRouteName={"Books" }
+          // initialRouteName={user.isAuthenticated ? "Books" : "Login"}
         >
           <Stack.Screen
             name="Login"
@@ -92,14 +93,15 @@ export default function AsyncApp({ navigation }) {
             name="Add"
             component={AddBookScreen}
             options={{
-              headerTitle: "Books App",
-              headerStyle: {
-                backgroundColor: "white",
-              },
-              headerTintColor: "#005EB8",
-              headerTitleStyle: {
-                fontWeight: "bold",
-              },
+              headerShown:false
+              // headerTitle: "Books App",
+              // headerStyle: {
+              //   backgroundColor: "white",
+              // },
+              // headerTintColor: "#005EB8",
+              // headerTitleStyle: {
+              //   fontWeight: "bold",
+              // },
             }}
           />
         </Stack.Navigator>
