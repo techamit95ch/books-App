@@ -1,69 +1,79 @@
-import React from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
-import { Card, Button, Input, Avatar } from "react-native-elements";
-import { MaterialIcons } from "@expo/vector-icons";
-import {
-  Link,
-  NativeBaseProvider,
-  ScrollView,
-  Text,
-  Pressable,
-} from "native-base";
-const LoginScreen = ({ navigation }) => {
-  const [show, setShow] = React.useState(false);
+import { useDispatch, useSelector } from "react-redux";
+import { User } from "../../interfaces";
+import { NativeBaseProvider, ScrollView } from "native-base";
+import LoginForm from "../../components/Forms/LoginForm";
+import { login } from "../../actions/auth";
 
-  const handleClick = () => setShow(!show);
+const LoginScreen = ({ navigation }) => {
+  const loginUser = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {}, [dispatch, loginUser]);
+  const [hide, setHide] = useState<boolean>(true);
+  const [user, setUser] = useState<User>({
+    email: "",
+    password: "",
+  });
+  const [successMessage, setSuccess] = useState<string>("");
+  const [error, setError] = useState({
+    isError: false,
+    email: "",
+    errorMessage: "",
+  });
+  const [alert, setAlert] = useState(false);
+  const validate = () => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (user.email !== "" && re.test(String(user.email))) {
+      setError({ ...error, email: ``, isError: false });
+    } else {
+      setError({
+        ...error,
+        email: user.email + `is not a valid email address`,
+        isError: true,
+      });
+    }
+  };
+  const submit = async() => {
+    try{
+      await login(user);
+      await dispatch(login(user));
+      console.log(loginUser);
+      if (loginUser.success) {
+        await setSuccess("User Created Successfully");
+        await setAlert(true);
+        await setTimeout(() => navigation.navigate('Books'), 5000)
+      }else{
+        await setError({ ...error, errorMessage: loginUser.errorMessage });
+        await setAlert(true);
+      }
+    }catch(err: any){
+      await setError({ ...error, errorMessage: loginUser.errorMessage });
+      console.error(err);
+
+    }
+    
+
+    
+
+    
+  };
   return (
     <NativeBaseProvider>
-      <ScrollView style={{ height: "100%" }}>
-        <Card>
-          <Card.Title>
-            {" "}
-            <Avatar
-              rounded
-              size={"xlarge"}
-              source={{
-                uri: "https://wallpapercave.com/wp/wp2297884.jpg",
-              }}
-            />
-          </Card.Title>
-          <Input
-            leftIcon={
-              <MaterialIcons name="alternate-email" size={24} color="grey" />
-            }
-            label="Email"
-            placeholder="Email"
-            errorStyle={{ color: "red" }}
-            errorMessage=""
-          />
-
-          <Input
-            leftIcon={<MaterialIcons name="lock" size={24} color="grey" />}
-            label="Password"
-            secureTextEntry={true}
-            placeholder="Password"
-            errorStyle={{ color: "red" }}
-            errorMessage=""
-          />
-
-          <Button type="clear" style={{ marginTop: 10 }} title="Login" />
-          <Card.Divider />
-
-          <Text sub style={{ margin: 10, padding:5}}>
-            Doesn't Have Account?{" "}
-            <Text
-              underline
-              italic
-              onPress={() => {
-                navigation.navigate(`SignIn`);
-              }}
-              color={"#005EB8"}
-            >
-              Create New
-            </Text>
-          </Text>
-        </Card>
+      <ScrollView style={{ height: "100%", backgroundColor: "#fff" }}>
+        <>
+        <LoginForm
+          navigation={navigation}
+          user={user}
+          setUser={setUser}
+          validate={validate}
+          submit={submit}
+          alert={alert}
+          error={error}
+          loginUser={loginUser}
+        />
+        </>
       </ScrollView>
     </NativeBaseProvider>
   );

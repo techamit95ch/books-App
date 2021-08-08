@@ -25,8 +25,12 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             uid: result?.user?.uid,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           })
-          .then((res) => {
-            dispatch({
+          .then(async (res) => {
+            await SecureStore.setItemAsync("email", String(user.email));
+            await SecureStore.setItemAsync("password", String(user.password));
+            await SecureStore.setItemAsync("uid", String(result?.user?.uid));
+            await SecureStore.setItemAsync("id", String(res?.id));
+            await dispatch({
               type: CREATE_USER,
               payload: {
                 uid: result?.user?.uid,
@@ -37,9 +41,8 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             });
             console.log(res.id);
           })
-          .catch((e) => {
-            // console.log(e.message);
-            dispatch({
+          .catch(async(e) => {
+            await dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage: e.message,
@@ -47,11 +50,11 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             });
           });
       })
-      .catch((error) => {
+      .catch(async(error) => {
         switch (error.code) {
           case "auth/email-already-in-use":
             // console.log(`Email address ${user.email} already in use.`);
-            dispatch({
+            await dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage: `Email address ${user.email} already in use.`,
@@ -60,7 +63,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             break;
           case "auth/invalid-email":
             console.log(`Email address ${user.email} is invalid.`);
-            dispatch({
+            await   dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage: `Email address ${user.email} is invalid.`,
@@ -69,7 +72,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             break;
           case "auth/operation-not-allowed":
             console.log(`Error during sign up.`);
-            dispatch({
+            await     dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage: `Error during sign up.`,
@@ -80,7 +83,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             console.log(
               "Password is not strong enough. Add additional characters including special characters and numbers."
             );
-            dispatch({
+            await    dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage:
@@ -90,7 +93,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             break;
           default:
             console.log(error.message);
-            dispatch({
+            await     dispatch({
               type: USER_ERRORS,
               payload: {
                 error: error.message,
@@ -101,7 +104,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
       });
   } catch (error: any) {
     console.error(error);
-    dispatch({
+    await  dispatch({
       type: USER_ERROR_MESSAGE,
       payload: {
         errorMessage: error.message,
@@ -109,7 +112,44 @@ export const storeUser = (user: User) => async (dispatch: any) => {
     });
   }
 };
-export const Login = (user: User) => async (dispatch: any) => {};
+export const login = (user: User) => async (dispatch: any) => {
+  try{
+    const email = await user.email;
+    const password = await user.password;
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(String(email), String(password))
+      .then(async (success) => {
+        //  console.log(success);
+        await SecureStore.setItemAsync("email", String(email));
+        await SecureStore.setItemAsync("password", String(password));
+        await SecureStore.setItemAsync("uid", String(success?.user?.uid));
+        await dispatch({
+          type: USER_AUTHENTICATION,
+          payload: {
+            isAuthenticated: true,
+          },
+        });
+      })
+      .catch(async(error: any) => {
+       await dispatch({
+          type: USER_ERROR_MESSAGE,
+          payload: {
+            errorMessage: error.message,
+          },
+        });
+      });
+  }
+  catch (e: any) {
+    await dispatch({
+       type: USER_ERROR_MESSAGE,
+       payload: {
+         errorMessage: e.message,
+       },
+     });
+   }
+  
+};
 export const isAuthenticated = () => async (dispatch: any) => {
   try {
     const email = await SecureStore.getItemAsync("email");
@@ -128,17 +168,17 @@ export const isAuthenticated = () => async (dispatch: any) => {
       await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then((success) => {
+        .then(async (success) => {
           //  console.log(success);
-          dispatch({
+          await dispatch({
             type: USER_AUTHENTICATION,
             payload: {
               isAuthenticated: true,
             },
           });
         })
-        .catch((error: any) => {
-          dispatch({
+        .catch( async (error: any) => {
+         await dispatch({
             type: USER_ERROR_MESSAGE,
             payload: {
               errorMessage: error.message,
@@ -147,7 +187,7 @@ export const isAuthenticated = () => async (dispatch: any) => {
         });
     }
   } catch (e: any) {
-    dispatch({
+   await dispatch({
       type: USER_ERROR_MESSAGE,
       payload: {
         errorMessage: e.message,

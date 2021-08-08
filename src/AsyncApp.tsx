@@ -50,8 +50,8 @@ export default function AsyncApp({ navigation }) {
     <SafeAreaProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator
-          initialRouteName={"Books" }
-          // initialRouteName={user.isAuthenticated ? "Books" : "Login"}
+          // initialRouteName={"Books" }
+          initialRouteName={user.isAuthenticated ? "Books" : "Login"}
         >
           <Stack.Screen
             name="Login"

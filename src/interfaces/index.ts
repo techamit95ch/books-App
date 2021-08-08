@@ -15,13 +15,14 @@ export interface Book{
     author?: string;
     title?: string;
     description?: string;    
-    user?:User
+    uid?: string;
+
 }
 export interface Books{
     books?: Book[];
-    user?:User;
-
+    uid?: string;
     errors?: any;
     errorMessage?:string;
-    success?: boolean;    
+    success?: boolean;  
+    isError?: boolean;  
 }

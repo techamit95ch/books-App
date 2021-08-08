@@ -105,10 +105,7 @@ const SignInScreen = ({ navigation}) => {
         console.log(users);
 
         if (users.success) {
-          await SecureStore.setItemAsync("email", String(user1.email));
-          await SecureStore.setItemAsync("password", String(user1.password));
-          await SecureStore.setItemAsync("uid", String(users.uid));
-          await SecureStore.setItemAsync("id", String(users.id));
+          
           await setSuccess("User Created Successfully");
           await setAlert(true);
           await setTimeout(() => navigation.navigate('Books'), 3000)
