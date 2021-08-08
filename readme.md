@@ -1,4 +1,4 @@
-# Hi!  A warm welcome in Books App
+# Hi!  `A warm welcome in Books App`
 
 ## Project Set Up
 ###
@@ -8,7 +8,7 @@
 `( 2. cd project folder(booksApp))`
 `( 3. npm i)`
 `( 4. npm start || expo start)`
-`( 5. install expo app from app store/ google store)`
+`( 5. install expo app from app store/ google playstore)`
 `( 6. read the QR code )`
 `( 7. That's it)`
 
