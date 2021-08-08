@@ -17,6 +17,7 @@ export interface Book{
     title?: string;
     description?: string;    
     uid?: string;
+    rating?: number
 
 }
 export interface Books{

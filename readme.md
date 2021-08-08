@@ -1,6 +1,8 @@
 # Hi!  A warm welcome in Books App
 
-# Project Set Up
+## Project Set Up
+###
+```markdown
 
 `( 1. Git clone the project)`
 `( 2. cd project folder(booksApp))`
@@ -10,3 +12,4 @@
 `( 6. read the QR code )`
 `( 7. That's it)`
 
+```

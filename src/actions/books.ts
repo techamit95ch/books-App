@@ -103,3 +103,9 @@ export const  getAll = () => async (dispatch: any) => {
     console.log(e);
   }
 }
+export const updateRating=()=>{
+
+}
+export const deleteBook=()=>{
+  
+}
