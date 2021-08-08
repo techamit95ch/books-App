@@ -22,6 +22,7 @@ const AddBooks = ({
   isSaveError,
   isDisabled,
   checkFilled,
+  authors
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [author, setAuthor] = React.useState("");
@@ -102,6 +103,7 @@ const AddBooks = ({
           >
             <Select.Item label="Select Author" value="none" disabled />
             {reactElem}
+            {authors.map(author => <Select.Item label={author} value={author}  />)}
             <Select.Item label="Add Author" value="add" />
           </Select>
 

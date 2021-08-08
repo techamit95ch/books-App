@@ -41,7 +41,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             });
             console.log(res.id);
           })
-          .catch(async(e) => {
+          .catch(async (e) => {
             await dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
@@ -50,7 +50,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             });
           });
       })
-      .catch(async(error) => {
+      .catch(async (error) => {
         switch (error.code) {
           case "auth/email-already-in-use":
             // console.log(`Email address ${user.email} already in use.`);
@@ -63,7 +63,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             break;
           case "auth/invalid-email":
             console.log(`Email address ${user.email} is invalid.`);
-            await   dispatch({
+            await dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage: `Email address ${user.email} is invalid.`,
@@ -72,7 +72,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             break;
           case "auth/operation-not-allowed":
             console.log(`Error during sign up.`);
-            await     dispatch({
+            await dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage: `Error during sign up.`,
@@ -83,7 +83,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             console.log(
               "Password is not strong enough. Add additional characters including special characters and numbers."
             );
-            await    dispatch({
+            await dispatch({
               type: USER_ERROR_MESSAGE,
               payload: {
                 errorMessage:
@@ -93,7 +93,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
             break;
           default:
             console.log(error.message);
-            await     dispatch({
+            await dispatch({
               type: USER_ERRORS,
               payload: {
                 error: error.message,
@@ -104,7 +104,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
       });
   } catch (error: any) {
     console.error(error);
-    await  dispatch({
+    await dispatch({
       type: USER_ERROR_MESSAGE,
       payload: {
         errorMessage: error.message,
@@ -113,7 +113,7 @@ export const storeUser = (user: User) => async (dispatch: any) => {
   }
 };
 export const login = (user: User) => async (dispatch: any) => {
-  try{
+  try {
     const email = await user.email;
     const password = await user.password;
     await firebase
@@ -133,28 +133,26 @@ export const login = (user: User) => async (dispatch: any) => {
           },
         });
       })
-      .catch(async(error: any) => {
+      .catch(async (error: any) => {
         console.log(error);
 
-       await dispatch({
+        await dispatch({
           type: USER_ERROR_MESSAGE,
           payload: {
             errorMessage: error.message,
           },
         });
       });
-  }
-  catch (e: any) {
+  } catch (e: any) {
     console.log(e);
 
     await dispatch({
-       type: USER_ERROR_MESSAGE,
-       payload: {
-         errorMessage: e.message,
-       },
-     });
-   }
-  
+      type: USER_ERROR_MESSAGE,
+      payload: {
+        errorMessage: e.message,
+      },
+    });
+  }
 };
 export const isAuthenticated = () => async (dispatch: any) => {
   try {
@@ -163,7 +161,7 @@ export const isAuthenticated = () => async (dispatch: any) => {
     const uid = await SecureStore.getItemAsync("uid");
     const id = await SecureStore.getItemAsync("id");
     // console.log(email, password, uid, id);
-    if (!email || !password || !uid ) {
+    if (!email || !password || !uid) {
       dispatch({
         type: USER_AUTHENTICATION,
         payload: {
@@ -176,27 +174,31 @@ export const isAuthenticated = () => async (dispatch: any) => {
         .signInWithEmailAndPassword(email, password)
         .then(async (success) => {
           //  console.log(success?.user?.uid);
-           await   dispatch({
+          await dispatch({
             type: USER_AUTHENTICATION,
             payload: {
               isAuthenticated: true,
+              authState: 1,
             },
           });
         })
-        .catch( async (error: any) => {
+        .catch(async (error: any) => {
           console.log(error.message);
-         await dispatch({
+          await dispatch({
             type: USER_ERROR_MESSAGE,
             payload: {
+              authState: 2,
               errorMessage: error.message,
             },
           });
         });
     }
   } catch (e: any) {
-   await dispatch({
+    await dispatch({
       type: USER_ERROR_MESSAGE,
       payload: {
+        authState: 2,
+
         errorMessage: e.message,
       },
     });

@@ -25,11 +25,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { Book } from "../../interfaces";
 import { storeBook } from "../../actions/books";
 import { useDispatch, useSelector } from "react-redux";
+import UseBooks from "../../hooks/useBooks";  
 
 const AddBook = ({ navigation }) => {
   const [hidden, setHidden] = useState(false);
   const dispatch = useDispatch();
   const books = useSelector((state: any) => state.books);
+  const [authors] = UseBooks();
 
   /* const BackButton = () => (
     <Button
@@ -112,6 +114,7 @@ const AddBook = ({ navigation }) => {
           saveBook={saveBook}
           isDisabled={isDisabled}
           checkFilled={checkFilled}
+          authors={authors}
         />
       </ScrollView>
     </NativeBaseProvider>

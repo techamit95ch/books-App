@@ -8,6 +8,7 @@ export interface User {
     errorMessage?:string;
     success?: boolean;
     isAuthenticated?: boolean;
+    authState?:number;
 }
 export interface Book{
 

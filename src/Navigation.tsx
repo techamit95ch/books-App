@@ -5,13 +5,15 @@ import { NavigationContainer, DrawerActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useDispatch, useSelector } from "react-redux";
 import { isAuthenticated } from "./actions/auth";
-import {getAll}from "./actions/books";
 import * as SecureStore from "expo-secure-store";
 import { Spinner, Center, NativeBaseProvider } from "native-base";
 // import AuthNav from "./navigation/Auth";
 import ContentNav from "./navigation/Content";
 import LoginScreen from "./screens/Auth/Login";
 import SignInScreen from "./screens/Auth/Signin";
+import { getAll } from "./actions/books";
+import { LogBox } from 'react-native';
+
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -19,9 +21,6 @@ import {
 } from "@react-navigation/drawer";
 
 export default function AsyncApp() {
-  // const navigation = useNavigation();
-
-  const [ready, setReady] = useState(false);
 
   let Stack;
   Stack = createStackNavigator();
@@ -30,13 +29,15 @@ export default function AsyncApp() {
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
+    LogBox.ignoreLogs(["timer"]);
     dispatch(isAuthenticated());
     dispatch(getAll());
-    setTimeout(() => setReady(true), 10000);
-  }, [dispatch, user, ready]);
+
+    // setTimeout(() => setReady(true), 2000);
+  }, [dispatch, user]);
   // console.log(user);
 
-  if (!ready) {
+  if (user.authState ===0) {
     return (
       <NativeBaseProvider>
         <Center flex={1}>
@@ -51,7 +52,6 @@ export default function AsyncApp() {
       <NavigationContainer independent={true}>
         <Stack.Navigator
           initialRouteName={user.isAuthenticated ? "Content" : "Auth"}
-          // initialRouteName={"Content"}
         >
           <Stack.Screen
             name="Auth"
