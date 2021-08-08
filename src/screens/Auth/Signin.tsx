@@ -108,7 +108,7 @@ const SignInScreen = ({ navigation}) => {
           
           await setSuccess("User Created Successfully");
           await setAlert(true);
-          await setTimeout(() => navigation.navigate('Books'), 3000)
+          await setTimeout(() => navigation.navigate('Content'), 3000)
         } else {
           await setError({ ...error, errorMessage: users.errorMessage });
           await setAlert(true);
@@ -137,7 +137,6 @@ const SignInScreen = ({ navigation}) => {
               </Alert.Title>
               <Alert.Description>
                 {users.success ? successMessage : users.errorMessage}
-                <MaterialIcons name="close" size={24} color="red" />
               </Alert.Description>
             </Alert>
           </Collapse>

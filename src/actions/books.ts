@@ -9,7 +9,7 @@ import {
   BOOK_ERROR_MESSAGE,
   BOOK_ERRORS,
 } from "../constraints";
-const storeBook = (book: Book) => async (dispatch: any) => {
+export const storeBook = (book: Book) => async (dispatch: any) => {
   try {
     const db = firebase.firestore();
     const uid = await SecureStore.getItemAsync("uid");
@@ -60,3 +60,12 @@ const storeBook = (book: Book) => async (dispatch: any) => {
     });
   }
 };
+
+export const  getBooks = () => async (dispatch: any) => {
+  try{
+    const db = firebase.firestore();
+    const uid = await SecureStore.getItemAsync("uid");
+  }catch(e){
+    console.log(e);
+  }
+}

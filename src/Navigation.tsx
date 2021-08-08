@@ -9,13 +9,15 @@ import * as SecureStore from "expo-secure-store";
 import { Spinner, Center, NativeBaseProvider } from "native-base";
 import AuthNav from "./navigation/Auth";
 import ContentNav from "./navigation/Content";
+import LoginScreen from "./screens/Auth/Login";
+import SignInScreen from "./screens/Auth/Signin";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
 } from "@react-navigation/drawer";
 
-export default function AsyncApp({ navigation }) {
+export default function AsyncApp() {
   // const navigation = useNavigation();
 
   const [ready, setReady] = useState(false);
@@ -28,7 +30,7 @@ export default function AsyncApp({ navigation }) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(isAuthenticated());
-    setTimeout(() => setReady(true), 3000);
+    setTimeout(() => setReady(true), 5000);
   }, [dispatch, user, ready]);
   // console.log(user);
 
@@ -51,9 +53,32 @@ export default function AsyncApp({ navigation }) {
         >
           <Stack.Screen
             name="Auth"
-            component={AuthNav}
+            component={LoginScreen}
             options={{
-              headerShown: false,
+              headerTitle: "Log In",
+              headerStyle: {
+                backgroundColor: "white",
+              },
+              headerTintColor: "#005EB8",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+              headerLeft: () => (<></>)
+
+            }}
+          />
+          <Stack.Screen
+            name="SignIn"
+            component={SignInScreen}
+            options={{
+              headerTitle: "Sign In",
+              headerStyle: {
+                backgroundColor: "white",
+              },
+              headerTintColor: "#005EB8",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
             }}
           />
           <Stack.Screen

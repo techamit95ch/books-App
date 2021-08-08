@@ -5,13 +5,13 @@ import { Card, Button, Input, Avatar } from "react-native-elements";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import {
-    Text,
-    ScrollView,
-    Collapse,
-    Alert,
-    NativeBaseProvider,
-  } from "native-base";
-  export default function LoginForm  ({
+  Text,
+  ScrollView,
+  Collapse,
+  Alert,
+  NativeBaseProvider,
+} from "native-base";
+export default function LoginForm({
   navigation,
   user,
   setUser,
@@ -19,33 +19,32 @@ import {
   validate,
   submit,
   alert,
-  loginUser
+  loginUser,
 }) {
   return (
-  <>
-      <Card style={{ marginTop: 10, alignItems: "center"  }}>
+    <>
       <Collapse isOpen={alert}>
-            <Alert
-              status={loginUser.success ? "success" : "error"}
-              display="flex"
-              variant="top-accent"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Alert.Icon />
-              <Alert.Title flexShrink={1}>
-                {loginUser.success ? "Success" : "Error"}
-              </Alert.Title>
-              <Alert.Description>
-                {loginUser.success ? `User Logged in successfully! ` : loginUser.errorMessage}
-                <MaterialIcons name="close" size={24} color="red" />
-              </Alert.Description>
-            </Alert>
-          </Collapse>
-          
-        <Card.Title >
-          {" "}
+        <Alert
+          status={loginUser.success ? "success" : "error"}
+          display="flex"
+          variant="top-accent"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Alert.Icon />
+          <Alert.Title flexShrink={1}>
+            {loginUser.success ? "Success" : "Error"}
+          </Alert.Title>
+          <Alert.Description>
+            {loginUser.success
+              ? `User Logged in successfully! `
+              : loginUser.errorMessage}
+          </Alert.Description>
+        </Alert>
+      </Collapse>
+      <Card >
+        <Card.Title>
           <Avatar
             rounded
             size={"large"}
@@ -69,8 +68,9 @@ import {
           onChange={(evt) => {
             // console.log(evt.nativeEvent.text);
             setUser({ ...user, email: evt.nativeEvent.text });
-            validate();
+            
           }}
+          onEndEditing={()=>validate()}
         />
 
         <Input
@@ -91,7 +91,7 @@ import {
           style={{ marginTop: 10 }}
           title="Login"
           onPress={submit}
-          disabled={user.email !== ""&& user.password !== "" && !error.isError}
+          disabled={user.email == "" || user.password === "" || error.email}
         />
         <Card.Divider />
 
@@ -108,11 +108,16 @@ import {
             Create New
           </Text>
         </Text>
+  
       </Card>
     </>
   );
-};
+}
 
-{/* export default LoginForm; */}
+{
+  /* export default LoginForm; */
+}
 
-{/* const styles = StyleSheet.create({}); */}
+{
+  /* const styles = StyleSheet.create({}); */
+}

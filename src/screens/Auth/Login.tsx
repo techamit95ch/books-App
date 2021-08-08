@@ -23,46 +23,43 @@ const LoginScreen = ({ navigation }) => {
   });
   const [alert, setAlert] = useState(false);
   const validate = () => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (user.email !== "" && re.test(String(user.email))) {
-      setError({ ...error, email: ``, isError: false });
-    } else {
-      setError({
-        ...error,
-        email: user.email + `is not a valid email address`,
-        isError: true,
-      });
+    if (user.email !== "") {
+      const re =
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(String(user.email))) {
+        setError({ ...error, email: ``, isError: false });
+      } else {
+        console.log(user.email + ":");
+        setError({
+          ...error,
+          email: user.email + `is not a valid email address`,
+          isError: true,
+        });
+      }
     }
   };
-  const submit = async() => {
-    try{
+  const submit = async () => {
+    // console.log(user);
+    try {
       await login(user);
       await dispatch(login(user));
       console.log(loginUser);
       if (loginUser.success) {
         await setSuccess("User Created Successfully");
         await setAlert(true);
-        await setTimeout(() => navigation.navigate('Books'), 5000)
-      }else{
+        await setTimeout(() => navigation.navigate("Content"), 5000);
+      } else {
         await setError({ ...error, errorMessage: loginUser.errorMessage });
         await setAlert(true);
       }
-    }catch(err: any){
+    } catch (err: any) {
       await setError({ ...error, errorMessage: loginUser.errorMessage });
       console.error(err);
-
     }
-    
-
-    
-
-    
   };
   return (
     <NativeBaseProvider>
       <ScrollView style={{ height: "100%", backgroundColor: "#fff" }}>
-        <>
         <LoginForm
           navigation={navigation}
           user={user}
@@ -73,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
           error={error}
           loginUser={loginUser}
         />
-        </>
+        
       </ScrollView>
     </NativeBaseProvider>
   );

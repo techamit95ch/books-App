@@ -14,7 +14,7 @@ const Books = ({ navigation }) => {
 
   return (
     <NativeBaseProvider>
-      <HeaderBar navigation={navigation} add={'Add Book'} back='' BackButton={(<></>)}/>
+      {/* <HeaderBar navigation={navigation} add={'Add Book'} back='' BackButton={(<></>)}/> */}
       <ScrollView>
         <Text> {"View Books"}</Text>
       </ScrollView>

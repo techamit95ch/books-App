@@ -24,8 +24,9 @@ export default (
       user.id = action.payload.id;
       return user;
     case GET_USER:
+      user.success = action.payload.success;
       user.uid = action.payload.uid;
-      user.uid = action.payload.uid;
+      user.isAuthenticated = action.payload.isAuthenticated;
       return user;
     case USER_ERROR_MESSAGE:
       user.errorMessage = action.payload.errorMessage;

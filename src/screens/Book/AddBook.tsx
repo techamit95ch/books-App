@@ -79,12 +79,12 @@ const AddBook = ({ navigation }) => {
   };
   return (
     <NativeBaseProvider>
-      <HeaderBar
+      {/* <HeaderBar
         navigation={navigation}
         add={""}
         back="back"
         BackButton={BackButton}
-      />
+      /> */}
 
       <ScrollView style={{ backgroundColor: "#fefefe", padding: 10 }}>
         <AddBookForm

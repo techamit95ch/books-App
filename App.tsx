@@ -5,6 +5,7 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { reducers } from "./src/reducers";
 import AsyncApp from "./src/AsyncApp";
+import Navigation from "./src/Navigation";
 import { LogBox } from "react-native";
 
 export default function App() {
@@ -14,7 +15,8 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <AsyncApp />
+      {/* <AsyncApp /> */}
+      <Navigation />
     </Provider>
   );
 }

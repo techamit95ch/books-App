@@ -2,10 +2,10 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Header, Text, Icon } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
-const HeaderBar = ({ navigation, back, add ,BackButton}) => {
+const HeaderBar = ({ navigation, back, add, BackButton }) => {
   return (
     <>
-      <Header
+      {/* <Header
         statusBarProps={{
           barStyle: "dark-content",
           backgroundColor: "white",
@@ -14,36 +14,31 @@ const HeaderBar = ({ navigation, back, add ,BackButton}) => {
         }}
         leftComponent={
           back === "back" ? (
-            <BackButton/>
+            <BackButton />
           ) : (
-            {
-              text: "Books App",
-              style: {
-                color: "#005EB8",
-                fontSize: 20,
-                marginLeft: 10,
-                width: 100,
-                fontWeight: "bold",
-                marginTop: 4,
-              },
-            }
+            <Button
+              type="clear"
+              // titleStyle={{ color: "#005EB8" }}
+              icon={{
+                name: "more-vert",
+                size: 24,
+                color: "#005EB8"
+              }}
+              onPress={() => navigation.toggleDrawer()}
+            />
           )
         }
-        centerComponent={
-          back === "back"
-            ? {
-                text: "Books App",
-                style: {
-                  color: "#005EB8",
-                  fontSize: 20,
-                  marginLeft: 10,
-                  width: 100,
-                  fontWeight: "bold",
-                  marginTop: 4,
-                },
-              }
-            : ``
-        }
+        centerComponent={{
+          text: "Books App",
+          style: {
+            color: "#005EB8",
+            fontSize: 20,
+            marginLeft: 10,
+            width: 100,
+            fontWeight: "bold",
+            marginTop: 4,
+          },
+        }}
         rightComponent={
           add === "Add Book" ? (
             <Button
@@ -57,7 +52,6 @@ const HeaderBar = ({ navigation, back, add ,BackButton}) => {
           )
         }
         rightContainerStyle={{ flex: 2 }}
-        
         containerStyle={{
           backgroundColor: "white",
           shadowColor: "#000",
@@ -66,7 +60,7 @@ const HeaderBar = ({ navigation, back, add ,BackButton}) => {
           shadowRadius: 0,
           elevation: 4,
         }}
-      />
+      /> */}
     </>
   );
 };

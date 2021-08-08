@@ -125,13 +125,17 @@ export const login = (user: User) => async (dispatch: any) => {
         await SecureStore.setItemAsync("password", String(password));
         await SecureStore.setItemAsync("uid", String(success?.user?.uid));
         await dispatch({
-          type: USER_AUTHENTICATION,
+          type: GET_USER,
           payload: {
+            uid: success?.user?.uid,
+            success: true,
             isAuthenticated: true,
           },
         });
       })
       .catch(async(error: any) => {
+        console.log(error);
+
        await dispatch({
           type: USER_ERROR_MESSAGE,
           payload: {
@@ -141,6 +145,8 @@ export const login = (user: User) => async (dispatch: any) => {
       });
   }
   catch (e: any) {
+    console.log(e);
+
     await dispatch({
        type: USER_ERROR_MESSAGE,
        payload: {
@@ -157,7 +163,7 @@ export const isAuthenticated = () => async (dispatch: any) => {
     const uid = await SecureStore.getItemAsync("uid");
     const id = await SecureStore.getItemAsync("id");
     // console.log(email, password, uid, id);
-    if (!email || !password || !uid || !id) {
+    if (!email || !password || !uid ) {
       dispatch({
         type: USER_AUTHENTICATION,
         payload: {
@@ -169,8 +175,8 @@ export const isAuthenticated = () => async (dispatch: any) => {
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(async (success) => {
-          //  console.log(success);
-          await dispatch({
+          //  console.log(success?.user?.uid);
+           await   dispatch({
             type: USER_AUTHENTICATION,
             payload: {
               isAuthenticated: true,
@@ -178,6 +184,7 @@ export const isAuthenticated = () => async (dispatch: any) => {
           });
         })
         .catch( async (error: any) => {
+          console.log(error.message);
          await dispatch({
             type: USER_ERROR_MESSAGE,
             payload: {
