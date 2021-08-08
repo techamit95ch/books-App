@@ -79,9 +79,10 @@ export const  getAll = () => async (dispatch: any) => {
     const db = firebase.firestore();
     const uid = await SecureStore.getItemAsync("uid");
     const BookRef =db. collection("books");
-    // const query = await BookRef.where("uid", "==", uid);
+    const query = await BookRef.where("uid", "==", uid);
     // await BookRef.orderBy("id", "desc").get().then((res) => {
-    await BookRef.get().then((res) => {
+    // await BookRef.get().then((res) => {
+    await query.get().then((res) => {
       res.forEach(function(doc) {        
         books.push({
           id:doc.data().id,
