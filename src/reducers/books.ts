@@ -19,11 +19,10 @@ export default (
   switch (action.type) {
     case GET_BOOKS:
       books.books = action.payload.books;
-
       return books;
     case CREATE_BOOK:
       books.uid = action.payload.uid;
-      books.books?.push(action.payload.book);
+      books.books.push(action.payload.book);
       books.success = action.payload.success;
       books.isError = action.payload.isError;
       books.errorMessage = action.payload.errorMessage;

@@ -20,13 +20,18 @@ import {
   Select,
 } from "native-base";
 import AddBookForm from "../../components/Forms/AddBooks";
-import HeaderBar from "../../components/Header/HeaderBar";
+// import HeaderBar from "../../components/Header/HeaderBar";
 import { Ionicons } from "@expo/vector-icons";
 import { Book } from "../../interfaces";
-import {storeBook} from "../../actions/books";
+import { storeBook } from "../../actions/books";
+import { useDispatch, useSelector } from "react-redux";
+
 const AddBook = ({ navigation }) => {
   const [hidden, setHidden] = useState(false);
-  const BackButton = () => (
+  const dispatch = useDispatch();
+  const books = useSelector((state: any) => state.books);
+
+  /* const BackButton = () => (
     <Button
       type="clear"
       icon={
@@ -39,7 +44,7 @@ const AddBook = ({ navigation }) => {
       }
       onPress={() => navigation.goBack()}
     />
-  );
+  ) ;*/
   const [book, setBook] = useState<Book>({
     author: "",
     title: "",
@@ -73,9 +78,19 @@ const AddBook = ({ navigation }) => {
       setDisabled(false);
     }
   };
-  useEffect(() => {}, [book,isInvalid,error]);
-  const saveBook = () => {
-    console.log(book);
+  useEffect(() => {}, [book, isInvalid, error]);
+  const saveBook = async () => {
+    await dispatch(storeBook(book));
+    if (books.success) {
+      await  setBook({
+        author: "",
+        title: "",
+        description: "",
+      });
+    } else {
+      console.log(books);
+    }
+    // console.log(book);
   };
   return (
     <NativeBaseProvider>

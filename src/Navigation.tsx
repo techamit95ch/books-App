@@ -5,9 +5,10 @@ import { NavigationContainer, DrawerActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useDispatch, useSelector } from "react-redux";
 import { isAuthenticated } from "./actions/auth";
+import {getAll}from "./actions/books";
 import * as SecureStore from "expo-secure-store";
 import { Spinner, Center, NativeBaseProvider } from "native-base";
-import AuthNav from "./navigation/Auth";
+// import AuthNav from "./navigation/Auth";
 import ContentNav from "./navigation/Content";
 import LoginScreen from "./screens/Auth/Login";
 import SignInScreen from "./screens/Auth/Signin";
@@ -30,7 +31,8 @@ export default function AsyncApp() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(isAuthenticated());
-    setTimeout(() => setReady(true), 5000);
+    dispatch(getAll());
+    setTimeout(() => setReady(true), 10000);
   }, [dispatch, user, ready]);
   // console.log(user);
 
