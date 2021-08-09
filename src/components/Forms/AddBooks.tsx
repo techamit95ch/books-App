@@ -11,8 +11,13 @@ import {
   Modal,
   Text,
   Divider,
+  Alert,
+  Spinner,
+  HStack,
+  Center,
 } from "native-base";
 import StarRating from "react-native-star-rating";
+import { LogBox } from 'react-native';
 
 const AddBooks = ({
   book,
@@ -35,13 +40,22 @@ const AddBooks = ({
   const [rating, setRating] = React.useState(0);
   const [description, setDescription] = React.useState("");
   const [reactElem, setReactElem] = React.useState(<></>);
-
+  const [ready, setReady]= React.useState(false);
+  React.useEffect(() => {
+    setTimeout(() => setReady(true), 1500);
+  },[] );
   const saveAuthor = () => {
     if (author === "" || author === "add") {
       setAuthError("Give Proper Name");
     } else {
       setBook({ ...book, author: author });
-      setReactElem(<Select.Item label={author} value={author} />);
+      setReactElem(
+        <Select.Item
+          label={author}
+          value={author}
+          key="0011000011000001101000010110111011"
+        />
+      );
       setAuthError("");
       setSelectedValue(author);
       setModalVisible(false);
@@ -75,6 +89,18 @@ const AddBooks = ({
       book
     );
   };
+  if (success === 2 || !ready) {
+    return (
+      <>
+        <HStack space={2} style={{ marginTop: 40 }}>
+          <Center flex={1}>
+            <Spinner accessibilityLabel="Submitting" color="blue.500" size="lg"/>
+          </Center>
+        </HStack>
+      </>
+    );
+  }
+  else if (success===0||success===1||success===3)
   return (
     <>
       <Modal isOpen={modalVisible}>
@@ -114,6 +140,20 @@ const AddBooks = ({
         </Modal.Content>
       </Modal>
 
+      <Modal isOpen={success === 1}>
+        <Modal.Content>
+          <Modal.CloseButton />
+          <Modal.Body>
+            <Alert variant="left-accent" status="success">
+              <Alert.Icon />
+              <Alert.Title flexShrink={1}>
+                Successfully Data Inserted
+              </Alert.Title>
+            </Alert>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+
       <FormControl isRequired isInvalid={isInvalid.author}>
         <Stack mx={4}>
           <FormControl.Label>Author</FormControl.Label>
@@ -127,13 +167,13 @@ const AddBooks = ({
           >
             <Select.Item label="Select Author" value="none" disabled />
             {reactElem}
-            {authors?.map((author) => (
-              <Select.Item label={author} value={author} />
+            {authors?.map((author, index) => (
+              <Select.Item label={author} value={author} key={index} />
             ))}
             <Select.Item label="Add Author" value="add" />
           </Select>
 
-          {isInvalid.author && selectedValue==="" &&(
+          {isInvalid.author && selectedValue === "" && (
             <FormControl.ErrorMessage>{error}</FormControl.ErrorMessage>
           )}
         </Stack>
@@ -180,9 +220,9 @@ const AddBooks = ({
       <FormControl>
         <Stack mx={4}>
           <FormControl.Label>
-          <>
-            <Text>Book Rating: </Text>
-            <Text style={{ color: "#005EB8" }}>{rating}/5</Text>
+            <>
+              <Text>Book Rating: </Text>
+              <Text style={{ color: "#005EB8" }}>{rating}/5</Text>
             </>
           </FormControl.Label>
 
@@ -205,7 +245,7 @@ const AddBooks = ({
             _text={{
               color: "#005EB8",
             }}
-            variant="unstyled"
+            variant="filled"
             onPress={() => {
               setBook({
                 rating: rating,
@@ -214,14 +254,16 @@ const AddBooks = ({
                 author: selectedValue,
               });
               saveBook();
-              setTitle("");
-              setRating(0);
-              setDescription("");
-              setSelectedValue("None");
-              setReactElem(<></>);
 
+              if (success === 1) {
+                setTitle("");
+                setRating(0);
+                setDescription("");
+                setSelectedValue("None");
+                setReactElem(<></>);
+              }
             }}
-            isDisabled={isDisabled}
+            isDisabled={isDisabled || success === 2}
           >
             Save
           </Button>

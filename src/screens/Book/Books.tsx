@@ -9,8 +9,11 @@ const Books = ({ navigation }) => {
   // const books = useSelector((state: any) => state.books.books);
   const [searchAuthor, results, authors, filterAuthor, setFilterAuthor] =
     UseBooks();
+  let [books, setBooks]= useState([]);
   // const [filterAuthor, setFilterAuthor]= useState("All");
-
+  useEffect(() => {
+    setBooks(results);
+  }, [ books]);
   return (
     <NativeBaseProvider>
       <SafeAreaView style={{ backgroundColor: "white" }}>
@@ -27,11 +30,13 @@ const Books = ({ navigation }) => {
               authors={authors}
               filterAuthor={filterAuthor}
               searchAuthor={searchAuthor}
+              setBooks={setBooks}
+              books={books}
             />
 
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={results}
+              data={books}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => <Book book={item} />}              
             />

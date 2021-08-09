@@ -1,8 +1,15 @@
 import React,{  useState ,useEffect} from "react";
-import {  useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import  {getAll} from "../actions/books";
+import { LogBox } from 'react-native';
 
 // import yelp from '../api/yelp'
 export default () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    LogBox.ignoreLogs(["timer"]);
+    dispatch(getAll());
+  }, [dispatch]);
   const [authors, setAuthors] = useState([]);
   const [filterAuthor, setFilterAuthor] = useState('All');
 

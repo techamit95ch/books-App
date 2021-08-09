@@ -60,7 +60,7 @@ const AddBook = ({ navigation }) => {
   });
   const [error, setError] = useState("");
   const [isSaveError, setIsSaveError] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(0);
   const [isDisabled, setDisabled] = useState(true);
   const checkFilled = () => {
     if (book.author === "") {
@@ -87,17 +87,23 @@ const AddBook = ({ navigation }) => {
       setDisabled(false);
     }
   };
-  useEffect(() => {}, [book, isInvalid, error]);
-  const saveBook = async () => {
-    await dispatch(storeBook(book));
+  useEffect(() => {}, [book, isInvalid, error,success,dispatch]);
+  const saveBook = () => {
+    setSuccess(2);
+    setDisabled(true);
+    console.log(book);
+    dispatch(storeBook(book));
     if (books.success) {
-      await  setBook({
+      setSuccess(1);
+       setBook({
         author: "",
         title: "",
         description: "",
         rating: 0,
       });
     } else {
+      setSuccess(3);
+
       console.log(books);
     }
   };

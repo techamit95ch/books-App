@@ -25,19 +25,18 @@ export default function AsyncApp() {
   let Stack;
   Stack = createStackNavigator();
   //  Stack = createDrawerNavigator();
-
+  const [ready, setReady]= React.useState(false);
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     LogBox.ignoreLogs(["timer"]);
     dispatch(isAuthenticated());
-    dispatch(getAll());
-
-    // setTimeout(() => setReady(true), 2000);
+    // dispatch(getAll());
+    setTimeout(() => setReady(true), 3000);
   }, [dispatch, user]);
   console.log(user.authState);
 
-  if (user.authState ===0) {
+  if (user.authState ===0 || !ready) {
     return (
       <NativeBaseProvider>
         <Center flex={1}>
