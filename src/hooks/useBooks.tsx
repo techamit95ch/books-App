@@ -6,23 +6,22 @@ import { LogBox } from 'react-native';
 // import yelp from '../api/yelp'
 export default () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    LogBox.ignoreLogs(["timer"]);
-    dispatch(getAll());
-  }, [dispatch]);
+  
   const [authors, setAuthors] = useState([]);
   const [filterAuthor, setFilterAuthor] = useState('All');
 
   const [results, setResults] = useState<any>([]);
   const [error, setError] = useState("");
-  
+  dispatch(getAll());
   const books = useSelector((state: any) => state.books.books);
+
   // console.log(books);
   books.forEach((book: any) =>{
     if (!authors.includes(book.author)){
       setAuthors([...authors, book.author]);
     }
   })
+  
   const searchAuthor =  (SearchTerm:string) => {
     try {
       if (SearchTerm === "All"||SearchTerm === "")  setResults(books);

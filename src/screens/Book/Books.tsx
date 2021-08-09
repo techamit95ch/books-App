@@ -14,11 +14,12 @@ const Books = ({ navigation }) => {
   // const [filterAuthor, setFilterAuthor]= useState("All");
   useEffect(() => {
     setBooks(results);
-  }, [ books,moreBook]);
+  }, [ books,moreBook,results]);
+  console.log(results,books);
   return (
     <NativeBaseProvider>
       <SafeAreaView style={{ backgroundColor: "white" }}>
-        {!results.length ? (
+        {!results.length||books.length===0 ? (
           <NativeBaseProvider>
           <Center flex={1} style={{justifyContent: "center", marginTop:40,backgroundColor: "white"}}>
             <Spinner color="green.500" size="lg" />

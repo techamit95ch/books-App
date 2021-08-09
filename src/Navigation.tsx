@@ -31,10 +31,10 @@ export default function AsyncApp() {
   useEffect(() => {
     LogBox.ignoreLogs(["timer"]);
     dispatch(isAuthenticated());
-    // dispatch(getAll());
+    dispatch(getAll());
     setTimeout(() => setReady(true), 3000);
   }, [dispatch, user]);
-  console.log(user.authState);
+  // console.log(user.authState);
 
   if (user.authState ===0 || !ready) {
     return (
@@ -50,8 +50,8 @@ export default function AsyncApp() {
     <SafeAreaProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator
-          initialRouteName={user.isAuthenticated ? "Content" : "Auth"}
-          // initialRouteName={"Content" }
+          // initialRouteName={user.isAuthenticated ? "Content" : "Auth"}
+          initialRouteName={"Content" }
         >
           <Stack.Screen
             name="Auth"

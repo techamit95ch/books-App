@@ -25,28 +25,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { Book } from "../../interfaces";
 import { storeBook } from "../../actions/books";
 import { useDispatch, useSelector } from "react-redux";
-import UseBooks from "../../hooks/useBooks";  
+import UseBooks from "../../hooks/useBooks";
 
 const AddBook = ({ navigation }) => {
   const [hidden, setHidden] = useState(false);
   const dispatch = useDispatch();
   const books = useSelector((state: any) => state.books);
-  const [searchAuthor, results, authors,filterAuthor, setFilterAuthor] = UseBooks();
+  useEffect(() => {}, [books]);
+  const [searchAuthor, results, authors, filterAuthor, setFilterAuthor] =
+    UseBooks();
 
-  /* const BackButton = () => (
-    <Button
-      type="clear"
-      icon={
-        <Ionicons
-          name="return-up-back-outline"
-          size={28}
-          color="#005EB8"
-          onPress={() => navigation.goBack()}
-        />
-      }
-      onPress={() => navigation.goBack()}
-    />
-  ) ;*/
   const [book, setBook] = useState<Book>({
     author: "",
     title: "",
@@ -64,19 +52,13 @@ const AddBook = ({ navigation }) => {
   const [isDisabled, setDisabled] = useState(true);
   const checkFilled = () => {
     if (book.author === "") {
-      setInvalid({author: true,
-        title: false,
-        description: false,});
+      setInvalid({ author: true, title: false, description: false });
       setError("Author is required ");
     } else if (book.title === "") {
-      setInvalid({author: false,
-        title: true,
-        description: false,});
+      setInvalid({ author: false, title: true, description: false });
       setError("Title is required ");
     } else if (book.description === "") {
-      setInvalid({ author: false,
-        title: false,
-        description: true, });
+      setInvalid({ author: false, title: false, description: true });
       setError("Description is required ");
     } else {
       setInvalid({
@@ -87,7 +69,7 @@ const AddBook = ({ navigation }) => {
       setDisabled(false);
     }
   };
-  useEffect(() => {}, [book, isInvalid, error,success,dispatch]);
+  useEffect(() => {}, [book, isInvalid, error, success, dispatch]);
   const saveBook = () => {
     setSuccess(2);
     setDisabled(true);
@@ -95,7 +77,8 @@ const AddBook = ({ navigation }) => {
     dispatch(storeBook(book));
     if (books.success) {
       setSuccess(1);
-       setBook({
+      navigation.navigate("Books");
+      setBook({
         author: "",
         title: "",
         description: "",
@@ -109,8 +92,6 @@ const AddBook = ({ navigation }) => {
   };
   return (
     <NativeBaseProvider>
-      
-
       <ScrollView style={{ backgroundColor: "#fefefe", padding: 10 }}>
         <AddBookForm
           book={book}
