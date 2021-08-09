@@ -10,7 +10,9 @@ import {
   Button,
   Modal,
   Text,
+  Divider
 } from "native-base";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
 const AddBooks = ({
   book,
@@ -22,13 +24,19 @@ const AddBooks = ({
   isSaveError,
   isDisabled,
   checkFilled,
-  authors
+  authors,
 }) => {
+  // console.log(authors);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [author, setAuthor] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [selectedValue, setSelectedValue] = React.useState("none");
+  const [title, setTitle] = React.useState("");
+  const [rating, setRating] = React.useState(0);
+  const [description, setDescription] = React.useState("");
   const [reactElem, setReactElem] = React.useState(<></>);
+
+  
   const saveAuthor = () => {
     if (author === "" || author === "add") {
       setAuthError("Give Proper Name");
@@ -39,17 +47,31 @@ const AddBooks = ({
       setSelectedValue(author);
       setModalVisible(false);
       checkFilled();
-      console.log(isInvalid);
-      console.log(book);
     }
   };
   const checkAuthor = (value: any = "") => {
     if (value === "add") {
       setModalVisible(true);
     } else {
+      setSelectedValue(value);
       setBook({ ...book, author: value });
+      checkFilled();
+
     }
   };
+  const changeRating =(value : number)=>{
+    setBook({ 
+      rating:value,
+      title:title,
+      description:description,
+      author:selectedValue
+    });
+    setRating(value);
+    // checkFilled();
+    console.log("From changeRating => ",rating,selectedValue,description,title,book);
+
+
+  }
   return (
     <>
       <Modal isOpen={modalVisible}>
@@ -88,7 +110,16 @@ const AddBooks = ({
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-
+      <FormControl>
+        <Stack mx={4}>
+          <Rating
+            imageSize={30}
+            showRating={true}
+            startingValue={rating}
+            onFinishRating={changeRating}
+          />
+        </Stack>
+      </FormControl>
       <FormControl isRequired isInvalid={isInvalid.author}>
         <Stack mx={4}>
           <FormControl.Label>Author</FormControl.Label>
@@ -96,14 +127,18 @@ const AddBooks = ({
             p={2}
             placeholder="Author"
             onValueChange={(itemValue) => {
+              // console.log(itemValue);
+
+              // setSelectedValue(itemValue);
               checkAuthor(itemValue);
-              checkFilled();
             }}
             selectedValue={selectedValue}
           >
             <Select.Item label="Select Author" value="none" disabled />
             {reactElem}
-            {authors.map(author => <Select.Item label={author} value={author}  />)}
+            {authors?.map((author) => (
+              <Select.Item label={author} value={author} />
+            ))}
             <Select.Item label="Add Author" value="add" />
           </Select>
 
@@ -119,9 +154,10 @@ const AddBooks = ({
           <Input
             p={2}
             placeholder="Book title"
-            value={book.title}
+            value={title}
             onChange={(evt) => {
               // console.log(evt.nativeEvent.text);
+              setTitle(evt.nativeEvent.text);
               setBook({ ...book, title: evt.nativeEvent.text });
               checkFilled();
             }}
@@ -137,8 +173,9 @@ const AddBooks = ({
           <TextArea
             numberOfLines={4}
             placeholder="Book Description"
-            value={book.description}
+            value={description}
             onChange={(evt) => {
+              setDescription(evt.nativeEvent.text);
               setBook({ ...book, description: evt.nativeEvent.text });
               checkFilled();
             }}
@@ -148,6 +185,8 @@ const AddBooks = ({
           )}
         </Stack>
       </FormControl>
+      
+     
       <FormControl isRequired isInvalid>
         <Stack mx={4} style={{ marginTop: 10 }}>
           <Button
@@ -155,7 +194,16 @@ const AddBooks = ({
               color: "#005EB8",
             }}
             variant="unstyled"
-            onPress={saveBook}
+            onPress={()=>{
+
+              setBook({ 
+                rating:rating,
+                title:title,
+                description:description,
+                author:selectedValue
+              });
+              saveBook();
+            }}
             isDisabled={isDisabled}
           >
             Save

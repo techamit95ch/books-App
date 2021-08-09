@@ -31,7 +31,7 @@ const AddBook = ({ navigation }) => {
   const [hidden, setHidden] = useState(false);
   const dispatch = useDispatch();
   const books = useSelector((state: any) => state.books);
-  const [authors] = UseBooks();
+  const [searchAuthor, results, authors,filterAuthor, setFilterAuthor] = UseBooks();
 
   /* const BackButton = () => (
     <Button
@@ -51,6 +51,7 @@ const AddBook = ({ navigation }) => {
     author: "",
     title: "",
     description: "",
+    rating: 0,
   });
   const [isInvalid, setInvalid] = useState({
     author: false,
@@ -63,13 +64,19 @@ const AddBook = ({ navigation }) => {
   const [isDisabled, setDisabled] = useState(true);
   const checkFilled = () => {
     if (book.author === "") {
-      setInvalid({ ...isInvalid, author: true });
+      setInvalid({author: true,
+        title: false,
+        description: false,});
       setError("Author is required ");
     } else if (book.title === "") {
-      setInvalid({ ...isInvalid, title: true });
+      setInvalid({author: false,
+        title: true,
+        description: false,});
       setError("Title is required ");
     } else if (book.description === "") {
-      setInvalid({ ...isInvalid, description: true });
+      setInvalid({ author: false,
+        title: false,
+        description: true, });
       setError("Description is required ");
     } else {
       setInvalid({
@@ -92,16 +99,10 @@ const AddBook = ({ navigation }) => {
     } else {
       console.log(books);
     }
-    // console.log(book);
   };
   return (
     <NativeBaseProvider>
-      {/* <HeaderBar
-        navigation={navigation}
-        add={""}
-        back="back"
-        BackButton={BackButton}
-      /> */}
+      
 
       <ScrollView style={{ backgroundColor: "#fefefe", padding: 10 }}>
         <AddBookForm

@@ -1,9 +1,10 @@
-import React,{  useState } from "react";
+import React,{  useState ,useEffect} from "react";
 import {  useSelector } from "react-redux";
 
 // import yelp from '../api/yelp'
 export default () => {
   const [authors, setAuthors] = useState([]);
+  const [filterAuthor, setFilterAuthor] = useState('All');
 
   const [results, setResults] = useState<any>([]);
   const [error, setError] = useState("");
@@ -15,26 +16,24 @@ export default () => {
       setAuthors([...authors, book.author]);
     }
   })
-  const searchAuthor = async (SearchTerm:string) => {
+  const searchAuthor =  (SearchTerm:string) => {
     try {
-      if (SearchTerm === "All"||SearchTerm === "") await setResults(books);
+      if (SearchTerm === "All"||SearchTerm === "")  setResults(books);
       else{
         let arr: any[] =[];
         console.log(SearchTerm);
-        await books.forEach((book: any) =>SearchTerm===book.author?arr.push(book):null);
-        console.log(arr);
-
-        await setResults(arr);
-        console.log(results);
-
-      //   await setResults(books.filter(book => book.author === SearchTerm));
+         books.forEach((book: any) =>SearchTerm===book.author?arr.push(book):null);
+         setResults(arr);        
       }
       
     } catch (err) {
       setError("Something went wrong");
     }
   };
-
+  useEffect(() => {
+    
+    searchAuthor(filterAuthor);
+}, [results,authors])
  
-  return [searchAuthor, results, error,authors];
+  return [searchAuthor, results, authors,filterAuthor, setFilterAuthor];
 };

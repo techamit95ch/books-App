@@ -120,7 +120,6 @@ export const login = (user: User) => async (dispatch: any) => {
       .auth()
       .signInWithEmailAndPassword(String(email), String(password))
       .then(async (success) => {
-        //  console.log(success);
         await SecureStore.setItemAsync("email", String(email));
         await SecureStore.setItemAsync("password", String(password));
         await SecureStore.setItemAsync("uid", String(success?.user?.uid));
@@ -169,12 +168,12 @@ export const isAuthenticated = () => async (dispatch: any) => {
         },
       });
     } else {
-      await firebase
+       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then(async (success) => {
-          //  console.log(success?.user?.uid);
-          await dispatch({
+        .then( (success) => {
+          // console.log(success);
+           dispatch({
             type: USER_AUTHENTICATION,
             payload: {
               isAuthenticated: true,
@@ -182,9 +181,9 @@ export const isAuthenticated = () => async (dispatch: any) => {
             },
           });
         })
-        .catch(async (error: any) => {
+        .catch( (error: any) => {
           console.log(error.message);
-          await dispatch({
+           dispatch({
             type: USER_ERROR_MESSAGE,
             payload: {
               authState: 2,
@@ -194,7 +193,7 @@ export const isAuthenticated = () => async (dispatch: any) => {
         });
     }
   } catch (e: any) {
-    await dispatch({
+     dispatch({
       type: USER_ERROR_MESSAGE,
       payload: {
         authState: 2,

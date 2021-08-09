@@ -37,7 +37,7 @@ export default function AsyncApp() {
   }, [dispatch, user]);
   // console.log(user);
 
-  if (user.authState ===0) {
+  /* if (user.authState ===0) {
     return (
       <NativeBaseProvider>
         <Center flex={1}>
@@ -45,13 +45,14 @@ export default function AsyncApp() {
         </Center>
       </NativeBaseProvider>
     );
-  }
+  } */
 
   return (
     <SafeAreaProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator
-          initialRouteName={user.isAuthenticated ? "Content" : "Auth"}
+          // initialRouteName={user.isAuthenticated ? "Content" : "Auth"}
+          initialRouteName={"Content" }
         >
           <Stack.Screen
             name="Auth"

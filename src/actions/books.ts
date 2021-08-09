@@ -9,16 +9,18 @@ import {
   BOOK_ERROR_MESSAGE,
   BOOK_ERRORS,
 } from "../constraints";
+import books from "../reducers/books";
 export const storeBook = (book: Book) => async (dispatch: any) => {
   try {
     const db = firebase.firestore();
     const uid = await SecureStore.getItemAsync("uid");
-
+    const id= Date.now();
     await db
       .collection("books")
       .add({
         ...book,
         uid: uid,
+        id: id,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then((res) => {
@@ -26,7 +28,7 @@ export const storeBook = (book: Book) => async (dispatch: any) => {
           type: CREATE_BOOK,
           payload: {
             uid: uid,
-            id: res?.id,
+            id: id,
             success: true,
             book: {
               ...book,
@@ -79,18 +81,24 @@ export const  getAll = () => async (dispatch: any) => {
     const db = firebase.firestore();
     const uid = await SecureStore.getItemAsync("uid");
     const BookRef =db. collection("books");
-    const query = await BookRef.where("uid", "==", uid);
+    const query =  BookRef.where("uid", "==", uid);
     // await BookRef.orderBy("id", "desc").get().then((res) => {
     // await BookRef.get().then((res) => {
-    await query.get().then((res) => {
-      res.forEach(function(doc) {        
-        books.push({
+     query.get().then((res) => {
+       console.log(typeof res );
+      //  console.log( res );
+
+      res.forEach(function(doc) {   
+             
+        /* books.push({
           id:doc.data().id,
           uid:doc.data().uid,
           author:doc.data().author,
           title:doc.data().title,
+          rating:doc.data().rating,
           description:doc.data().description,
-        });
+        }); */
+        books.push(doc.data());
     });
     dispatch({
       type: GET_BOOKS,
@@ -103,9 +111,9 @@ export const  getAll = () => async (dispatch: any) => {
     console.log(e);
   }
 }
-export const updateRating=()=>{
+export const updateRating=(id, rating) => async (dispatch: any)=>{
 
 }
-export const deleteBook=()=>{
-  
+export const deleteBook=(id) => async (dispatch: any)=>{
+
 }
