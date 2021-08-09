@@ -85,7 +85,7 @@ export const  getAll = () => async (dispatch: any) => {
     // await BookRef.orderBy("id", "desc").get().then((res) => {
     // await BookRef.get().then((res) => {
      query.get().then((res) => {
-       console.log(typeof res );
+      //  console.log(typeof res );
       //  console.log( res );
 
       res.forEach(function(doc) {   
@@ -112,8 +112,14 @@ export const  getAll = () => async (dispatch: any) => {
   }
 }
 export const updateRating=(id, rating) => async (dispatch: any)=>{
-
+  const db = firebase.firestore();
+  const uid = await SecureStore.getItemAsync("uid");
+  const BookRef =db. collection("books");
+  const query =  BookRef.doc('id');
 }
 export const deleteBook=(id) => async (dispatch: any)=>{
-
+  const db = firebase.firestore();
+  const uid = await SecureStore.getItemAsync("uid");
+  const BookRef =db. collection("books");
+  const query =  BookRef.doc('id');
 }
