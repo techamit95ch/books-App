@@ -10,9 +10,9 @@ import {
   Button,
   Modal,
   Text,
-  Divider
+  Divider,
 } from "native-base";
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import StarRating from "react-native-star-rating";
 
 const AddBooks = ({
   book,
@@ -36,7 +36,6 @@ const AddBooks = ({
   const [description, setDescription] = React.useState("");
   const [reactElem, setReactElem] = React.useState(<></>);
 
-  
   const saveAuthor = () => {
     if (author === "" || author === "add") {
       setAuthError("Give Proper Name");
@@ -56,22 +55,26 @@ const AddBooks = ({
       setSelectedValue(value);
       setBook({ ...book, author: value });
       checkFilled();
-
     }
   };
-  const changeRating =(value : number)=>{
-    setBook({ 
-      rating:value,
-      title:title,
-      description:description,
-      author:selectedValue
+  const changeRating = (value: number) => {
+    setBook({
+      rating: value,
+      title: title,
+      description: description,
+      author: selectedValue,
     });
     setRating(value);
-    // checkFilled();
-    console.log("From changeRating => ",rating,selectedValue,description,title,book);
-
-
-  }
+    checkFilled();
+    console.log(
+      "From changeRating => ",
+      rating,
+      selectedValue,
+      description,
+      title,
+      book
+    );
+  };
   return (
     <>
       <Modal isOpen={modalVisible}>
@@ -110,16 +113,7 @@ const AddBooks = ({
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-      <FormControl>
-        <Stack mx={4}>
-          <Rating
-            imageSize={30}
-            showRating={true}
-            startingValue={rating}
-            onFinishRating={changeRating}
-          />
-        </Stack>
-      </FormControl>
+
       <FormControl isRequired isInvalid={isInvalid.author}>
         <Stack mx={4}>
           <FormControl.Label>Author</FormControl.Label>
@@ -127,9 +121,6 @@ const AddBooks = ({
             p={2}
             placeholder="Author"
             onValueChange={(itemValue) => {
-              // console.log(itemValue);
-
-              // setSelectedValue(itemValue);
               checkAuthor(itemValue);
             }}
             selectedValue={selectedValue}
@@ -142,7 +133,7 @@ const AddBooks = ({
             <Select.Item label="Add Author" value="add" />
           </Select>
 
-          {isInvalid.author && (
+          {isInvalid.author && selectedValue==="" &&(
             <FormControl.ErrorMessage>{error}</FormControl.ErrorMessage>
           )}
         </Stack>
@@ -185,8 +176,29 @@ const AddBooks = ({
           )}
         </Stack>
       </FormControl>
-      
-     
+
+      <FormControl>
+        <Stack mx={4}>
+          <FormControl.Label>
+          <>
+            <Text>Book Rating: </Text>
+            <Text style={{ color: "#005EB8" }}>{rating}/5</Text>
+            </>
+          </FormControl.Label>
+
+          <StarRating
+            disabled={false}
+            emptyStar={"ios-star-outline"}
+            fullStar={"ios-star"}
+            halfStar={"ios-star-half"}
+            iconSet={"Ionicons"}
+            maxStars={5}
+            rating={rating}
+            selectedStar={changeRating}
+            fullStarColor={"#005EB8"}
+          />
+        </Stack>
+      </FormControl>
       <FormControl isRequired isInvalid>
         <Stack mx={4} style={{ marginTop: 10 }}>
           <Button
@@ -194,15 +206,20 @@ const AddBooks = ({
               color: "#005EB8",
             }}
             variant="unstyled"
-            onPress={()=>{
-
-              setBook({ 
-                rating:rating,
-                title:title,
-                description:description,
-                author:selectedValue
+            onPress={() => {
+              setBook({
+                rating: rating,
+                title: title,
+                description: description,
+                author: selectedValue,
               });
               saveBook();
+              setTitle("");
+              setRating(0);
+              setDescription("");
+              setSelectedValue("None");
+              setReactElem(<></>);
+
             }}
             isDisabled={isDisabled}
           >

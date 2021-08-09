@@ -95,6 +95,7 @@ const AddBook = ({ navigation }) => {
         author: "",
         title: "",
         description: "",
+        rating: 0,
       });
     } else {
       console.log(books);

@@ -33,7 +33,7 @@ const Books = ({ navigation }) => {
               showsVerticalScrollIndicator={false}
               data={results}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => <Book book={item} />}
+              renderItem={({ item }) => <Book book={item} />}              
             />
           </>
         )}
