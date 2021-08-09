@@ -10,10 +10,11 @@ const Books = ({ navigation }) => {
   const [searchAuthor, results, authors, filterAuthor, setFilterAuthor] =
     UseBooks();
   let [books, setBooks]= useState([]);
+  const [moreBook,setMoreBook]= useState(filterAuthor);
   // const [filterAuthor, setFilterAuthor]= useState("All");
   useEffect(() => {
     setBooks(results);
-  }, [ books]);
+  }, [ books,moreBook]);
   return (
     <NativeBaseProvider>
       <SafeAreaView style={{ backgroundColor: "white" }}>
@@ -38,7 +39,7 @@ const Books = ({ navigation }) => {
               showsVerticalScrollIndicator={false}
               data={books}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => <Book book={item} />}              
+              renderItem={({ item }) => <Book book={item} setMoreBook={setFilterAuthor}/>}              
             />
           </>
         )}

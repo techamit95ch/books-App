@@ -5,8 +5,9 @@ import { ListItem, Button, Icon, Divider, Text } from "react-native-elements";
 import StarRating from "react-native-star-rating";
 import { updateRating, deleteBook } from "../../actions/books";
 import { useDispatch } from "react-redux";
+import { Link } from 'native-base';
 
-const Book = ({ book }) => {
+const Book = ({ book,setMoreBook }) => {
   const dispatch = useDispatch();
   const [rating, setRating] = React.useState(book.rating);
   const changeRating = (value: number) => {
@@ -41,7 +42,12 @@ const Book = ({ book }) => {
             </Text>
           </ListItem.Title>
           <ListItem.Subtitle style={{ marginLeft: 10, flex: 3, color: "grey" }}>
+            
+            <Link onPress={()=>{
+              setMoreBook(book?.author);
+            }} mt={4}>
             By - {book?.author}
+      </Link>
           </ListItem.Subtitle>
           <ListItem.Subtitle style={{ marginHorizontal: 10, color: "#005EB8" }}>
             <StarRating
