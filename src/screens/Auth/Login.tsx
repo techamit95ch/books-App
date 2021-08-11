@@ -7,9 +7,9 @@ import LoginForm from "../../components/Forms/LoginForm";
 import { login } from "../../actions/auth";
 
 const LoginScreen = ({ navigation }) => {
-  const loginUser = useSelector((state: any) => state.user);
+  const results = useSelector((state: any) => state.results);
   const dispatch = useDispatch();
-  useEffect(() => {}, [dispatch, loginUser]);
+  useEffect(() => {}, [dispatch, results]);
   const [hide, setHide] = useState<boolean>(true);
   const [user, setUser] = useState<User>({
     email: "",
@@ -43,17 +43,17 @@ const LoginScreen = ({ navigation }) => {
     try {
       await login(user);
       await dispatch(login(user));
-      console.log(loginUser);
-      if (loginUser.success) {
+      console.log(results);
+      if (results.success && results.isAuthenticated) {
         await setSuccess("User Created Successfully");
         await setAlert(true);
         await setTimeout(() => navigation.navigate("Content"), 5000);
       } else {
-        await setError({ ...error, errorMessage: loginUser.errorMessage });
+        await setError({ ...error, errorMessage: results.errorMessage });
         await setAlert(true);
       }
     } catch (err: any) {
-      await setError({ ...error, errorMessage: loginUser.errorMessage });
+      await setError({ ...error, errorMessage: results.errorMessage });
       console.error(err);
     }
   };
@@ -68,7 +68,7 @@ const LoginScreen = ({ navigation }) => {
           submit={submit}
           alert={alert}
           error={error}
-          loginUser={loginUser}
+          loginUser={results}
         />
         
       </ScrollView>

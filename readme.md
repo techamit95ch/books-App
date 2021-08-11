@@ -1,4 +1,4 @@
-# Hi!  #A warm welcome in `Books App`
+# Hi!  A warm welcome in `Books App`
 
 ## Project Set Up
 ###

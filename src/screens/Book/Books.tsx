@@ -5,17 +5,17 @@ import FilterAuthor from "../../components/ListViews/FiterAuth";
 import { LogBox } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import UseBooks from "../../hooks/useBooks";
+import { useDispatch, useSelector } from "react-redux";
+
 const Books = ({ navigation }) => {
-  // const books = useSelector((state: any) => state.books.books);
-  const [searchAuthor, results, authors, filterAuthor, setFilterAuthor] =
-    UseBooks();
+  const [searchAuthor, results,  filterAuthor, setFilterAuthor] = UseBooks();
   let [books, setBooks]= useState([]);
   const [moreBook,setMoreBook]= useState(filterAuthor);
-  // const [filterAuthor, setFilterAuthor]= useState("All");
+  const authors = useSelector((state: any) => state.authors);
+
   useEffect(() => {
     setBooks(results);
   }, [ books,moreBook,results]);
-  console.log(results,books);
   return (
     <NativeBaseProvider>
       <SafeAreaView style={{ backgroundColor: "white" }}>

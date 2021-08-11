@@ -1,44 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { StatusBar } from "react-native";
-import {
-  Card,
-  Button,
-  ListItem,
-  Avatar,
-  Header,
-  Text,
-} from "react-native-elements";
-import {
-  ScrollView,
-  Collapse,
-  Alert,
-  NativeBaseProvider,
-  FormControl,
-  Input,
-  Stack,
-  TextArea,
-  Select,
-} from "native-base";
-import AddBookForm from "../../components/Forms/AddBooks";
-// import HeaderBar from "../../components/Header/HeaderBar";
-import { Ionicons } from "@expo/vector-icons";
-import { Book } from "../../interfaces";
-import { storeBook } from "../../actions/books";
-import { useDispatch, useSelector } from "react-redux";
-import UseBooks from "../../hooks/useBooks";
+import React, { useState, useEffect } from 'react';
+
+import { ScrollView, NativeBaseProvider } from 'native-base';
+import AddBookForm from '../../components/Forms/AddBooks';
+import { Book } from '../../interfaces';
+import { storeBook } from '../../actions/books';
+import { useDispatch, useSelector } from 'react-redux';
+import UseBooks from '../../hooks/useBooks';
 
 const AddBook = ({ navigation }) => {
   const [hidden, setHidden] = useState(false);
   const dispatch = useDispatch();
-  const books = useSelector((state: any) => state.books);
-  useEffect(() => {}, [books]);
-  const [searchAuthor, results, authors, filterAuthor, setFilterAuthor] =
-    UseBooks();
+  const books = useSelector((state: any) => state.results);
+  
+  const [error, setError] = useState('');
+  const [isSaveError, setIsSaveError] = useState(false);
+  const [success, setSuccess] = useState(0);
+  const [isDisabled, setDisabled] = useState(true);
+  const [searchAuthor, results, filterAuthor, setFilterAuthor] = UseBooks();
 
   const [book, setBook] = useState<Book>({
-    author: "",
-    title: "",
-    description: "",
+    author: '',
+    title: '',
+    description: '',
     rating: 0,
   });
   const [isInvalid, setInvalid] = useState({
@@ -46,20 +29,30 @@ const AddBook = ({ navigation }) => {
     title: false,
     description: false,
   });
-  const [error, setError] = useState("");
-  const [isSaveError, setIsSaveError] = useState(false);
-  const [success, setSuccess] = useState(0);
-  const [isDisabled, setDisabled] = useState(true);
+  const authors = useSelector((state: any) => state.authors);
+  const answer = useSelector((state: any) => state.results);
+  useEffect(() => {}, [
+    answer,
+    books,
+    authors,
+    book,
+    isInvalid,
+    error,
+    success,
+    dispatch,
+  ]);
+  // useEffect(() => {}, []);
+
   const checkFilled = () => {
-    if (book.author === "") {
+    if (book.author === '') {
       setInvalid({ author: true, title: false, description: false });
-      setError("Author is required ");
-    } else if (book.title === "") {
+      setError('Author is required ');
+    } else if (book.title === '') {
       setInvalid({ author: false, title: true, description: false });
-      setError("Title is required ");
-    } else if (book.description === "") {
+      setError('Title is required ');
+    } else if (book.description === '') {
       setInvalid({ author: false, title: false, description: true });
-      setError("Description is required ");
+      setError('Description is required ');
     } else {
       setInvalid({
         author: false,
@@ -69,30 +62,29 @@ const AddBook = ({ navigation }) => {
       setDisabled(false);
     }
   };
-  useEffect(() => {}, [book, isInvalid, error, success, dispatch]);
   const saveBook = () => {
     setSuccess(2);
     setDisabled(true);
     console.log(book);
     dispatch(storeBook(book));
-    if (books.success) {
+    if (answer?.success) {
       setSuccess(1);
-      navigation.navigate("Books");
+      navigation.navigate('Books');
       setBook({
-        author: "",
-        title: "",
-        description: "",
+        author: '',
+        title: '',
+        description: '',
         rating: 0,
       });
     } else {
       setSuccess(3);
 
-      console.log(books);
+      console.log(answer);
     }
   };
   return (
     <NativeBaseProvider>
-      <ScrollView style={{ backgroundColor: "#fefefe", padding: 10 }}>
+      <ScrollView style={{ backgroundColor: '#fefefe', padding: 10 }}>
         <AddBookForm
           book={book}
           setBook={setBook}
