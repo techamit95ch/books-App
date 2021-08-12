@@ -11,12 +11,12 @@ const AddBook = ({ navigation }) => {
   const [hidden, setHidden] = useState(false);
   const dispatch = useDispatch();
   const books = useSelector((state: any) => state.results);
-  
+
   const [error, setError] = useState('');
   const [isSaveError, setIsSaveError] = useState(false);
   const [success, setSuccess] = useState(0);
   const [isDisabled, setDisabled] = useState(true);
-  const [searchAuthor, results, filterAuthor, setFilterAuthor] = UseBooks();
+  // const [searchAuthor, results, filterAuthor, setFilterAuthor] = UseBooks();
 
   const [book, setBook] = useState<Book>({
     author: '',
@@ -31,17 +31,55 @@ const AddBook = ({ navigation }) => {
   });
   const authors = useSelector((state: any) => state.authors);
   const answer = useSelector((state: any) => state.results);
-  useEffect(() => {}, [
-    answer,
-    books,
-    authors,
-    book,
-    isInvalid,
-    error,
-    success,
-    dispatch,
-  ]);
+
+  let firstTime = 1;
+  useEffect(() => {
+    if (firstTime === 1) {
+      if (success === 2) {
+        if (answer.success) {
+          setSuccess(1);
+          setBook({
+            author: '',
+            title: '',
+            description: '',
+            rating: 0,
+          });
+        }
+      }
+      firstTime = firstTime + 1;
+    } else {
+      if (success === 1) {
+        if (
+          book.author === '' &&
+          book.title === '' &&
+          book.description === ''
+        ) {
+          firstTime = 0;
+          setSuccess(0);
+          setDisabled(false);
+        } else {
+          setTimeout(() => {
+            setBook({
+              author: '',
+              title: '',
+              description: '',
+              rating: 0,
+            });
+            firstTime = 0;
+            setSuccess(0);
+            setDisabled(false);
+            setInvalid({
+              author: false,
+              title: false,
+              description: false,
+            });
+          }, 1000);
+        }
+      }
+    }
+  }, [answer, books, authors, book, isInvalid, error, success, dispatch]);
   // useEffect(() => {}, []);
+  console.log(answer);
 
   const checkFilled = () => {
     if (book.author === '') {
@@ -65,22 +103,26 @@ const AddBook = ({ navigation }) => {
   const saveBook = () => {
     setSuccess(2);
     setDisabled(true);
-    console.log(book);
     dispatch(storeBook(book));
-    if (answer?.success) {
-      setSuccess(1);
-      navigation.navigate('Books');
-      setBook({
-        author: '',
-        title: '',
-        description: '',
-        rating: 0,
-      });
-    } else {
-      setSuccess(3);
-
+    // navigation.navigate('Books');
+    setTimeout(() => {
+      // navigation.navigate('Books');
       console.log(answer);
-    }
+
+      if (answer?.success) {
+        setSuccess(1);
+        setBook({
+          author: '',
+          title: '',
+          description: '',
+          rating: 0,
+        });
+        navigation.navigate('Books');
+      } else {
+        setSuccess(3);
+        console.log(answer);
+      }
+    }, 2200);
   };
   return (
     <NativeBaseProvider>

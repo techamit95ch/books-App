@@ -178,6 +178,7 @@ export const isAuthenticated = () => async (dispatch: any) => {
           dispatch({
             type: USER_AUTHENTICATION,
             payload: {
+              uid: success?.user?.uid,
               isAuthenticated: true,
               authState: 1,
             },

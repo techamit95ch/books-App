@@ -10,7 +10,7 @@ export default (books: any[] = [], action: any) => {
     case GET_BOOKS:
       return action.payload;
     case CREATE_BOOK:
-      return [...books, action.payload];
+      return [...books, action.payload.book];
     case UPDATE_RATING:
       return books?.map((book) => {
         if (book.id === action.payload.id) {

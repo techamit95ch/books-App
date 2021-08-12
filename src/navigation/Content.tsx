@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { NavigationContainer, DrawerActions } from "@react-navigation/native";
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
-} from "@react-navigation/drawer";
-import BookScreen from "../screens/Book/Books";
-import AddBookScreen from "../screens/Book/AddBook";
-import * as SecureStore from "expo-secure-store";
-import { useDispatch, useSelector } from "react-redux";
+} from '@react-navigation/drawer';
+import BookScreen from '../screens/Book/Books';
+import AddBookScreen from '../screens/Book/AddBook';
+import * as SecureStore from 'expo-secure-store';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function ContentNav({ navigation }) {
   const Stack = createDrawerNavigator();
@@ -22,17 +22,17 @@ export default function ContentNav({ navigation }) {
     <>
       <NavigationContainer independent={true}>
         <Stack.Navigator
-          initialRouteName={"Books"}
+          initialRouteName={'Books'}
           drawerContent={(props) => (
             <DrawerContentScrollView {...props}>
               <DrawerItemList {...props} />
 
-              <DrawerItem
+              {/* <DrawerItem
                 label="Log Out"
                 onPress={() =>
                   props.navigation.dispatch(DrawerActions.closeDrawer())
                 }
-              />
+              /> */}
             </DrawerContentScrollView>
           )}
         >
@@ -40,27 +40,27 @@ export default function ContentNav({ navigation }) {
             name="Books"
             component={BookScreen}
             options={{
-                headerTitle: "Books App",
-                headerStyle: {
-                  backgroundColor: "white",
-                },
-                headerTintColor: "#005EB8",
-                headerTitleStyle: {
-                  fontWeight: "bold",
-                },
-              }}
+              headerTitle: 'Books App',
+              headerStyle: {
+                backgroundColor: 'white',
+              },
+              headerTintColor: '#005EB8',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
           />
           <Stack.Screen
             name="Add"
             component={AddBookScreen}
             options={{
-              headerTitle: "Books App",
+              headerTitle: 'Books App',
               headerStyle: {
-                backgroundColor: "white",
+                backgroundColor: 'white',
               },
-              headerTintColor: "#005EB8",
+              headerTintColor: '#005EB8',
               headerTitleStyle: {
-                fontWeight: "bold",
+                fontWeight: 'bold',
               },
             }}
           />

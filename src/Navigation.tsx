@@ -17,16 +17,23 @@ export default function AsyncApp() {
   Stack = createStackNavigator();
   const [ready, setReady] = React.useState(false);
   const results = useSelector((state: any) => state.results);
+  const [success, setSuccess] = React.useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     LogBox.ignoreLogs(['timer']);
     dispatch(isAuthenticated());
     dispatch(getAll());
-    setTimeout(() => setReady(true), 1000);
-  }, [dispatch, results]);
-  if (results.authState === 0 || !ready) {
+    setTimeout(() => {
+      setReady(true);
+      if (results?.authState === 0) setSuccess(false);
+      if (results.isAuthenticated) setSuccess(true);
+      if (results.authState === 1) setSuccess(true);
+      // auth = results;
+    }, 3000);
+  }, [dispatch, results, success]);
+  console.log(success);
+  if (!success || !ready) {
     // if (!ready) {
-
     return (
       <NativeBaseProvider>
         <Center flex={1}>
@@ -34,56 +41,55 @@ export default function AsyncApp() {
         </Center>
       </NativeBaseProvider>
     );
-  } else {
-    console.log(results);
-
-    return (
-      <SafeAreaProvider>
-        <NavigationContainer independent={true}>
-          <Stack.Navigator
-            initialRouteName={results.isAuthenticated ? 'Content' : 'Auth'}
-          >
-            <Stack.Screen
-              name="Auth"
-              component={LoginScreen}
-              options={{
-                headerTitle: 'Log In',
-                headerStyle: {
-                  backgroundColor: 'white',
-                },
-                headerTintColor: '#005EB8',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-                headerLeft: () => <></>,
-              }}
-            />
-            <Stack.Screen
-              name="SignIn"
-              component={SignInScreen}
-              options={{
-                headerTitle: 'Sign In',
-                headerStyle: {
-                  backgroundColor: 'white',
-                },
-                headerTintColor: '#005EB8',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Content"
-              component={ContentNav}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    );
   }
+
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer independent={true}>
+        <Stack.Navigator
+          initialRouteName={success ? 'Content' : 'Auth'}
+          // initialRouteName={'Content'}
+        >
+          <Stack.Screen
+            name="Auth"
+            component={LoginScreen}
+            options={{
+              headerTitle: 'Log In',
+              headerStyle: {
+                backgroundColor: 'white',
+              },
+              headerTintColor: '#005EB8',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+              headerLeft: () => <></>,
+            }}
+          />
+          <Stack.Screen
+            name="SignIn"
+            component={SignInScreen}
+            options={{
+              headerTitle: 'Sign In',
+              headerStyle: {
+                backgroundColor: 'white',
+              },
+              headerTintColor: '#005EB8',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Content"
+            component={ContentNav}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
 }
 
 const styles = StyleSheet.create({

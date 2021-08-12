@@ -13,10 +13,10 @@ export default function App() {
 
   return (
     <>
-       <Provider store={store}>
-      {/* <AsyncApp /> */}
-      <Navigation />
-       </Provider>
+      <Provider store={store}>
+        {/* <AsyncApp /> */}
+        <Navigation />
+      </Provider>
     </>
   );
 }

@@ -1,70 +1,114 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { ListItem, Button, Icon, Divider, Text } from "react-native-elements";
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { ListItem, Button, Icon, Divider, Text } from 'react-native-elements';
 // import { Book } from './../../interfaces/index';
-import StarRating from "react-native-star-rating";
-import { updateRating, deleteBook } from "../../actions/books";
-import { useDispatch } from "react-redux";
-import { Link } from 'native-base';
 
-const Book = ({ book,setMoreBook }) => {
+import {
+  VStack,
+  Center,
+  Heading,
+  NativeBaseProvider,
+  Stack,
+  Pressable,
+} from 'native-base';
+
+import StarRating from 'react-native-star-rating';
+import { updateRating, deleteBook } from '../../actions/books';
+import { useDispatch } from 'react-redux';
+
+const Book = ({ book, setAuthor, viewBooks, setViewBooks, user }) => {
   const dispatch = useDispatch();
   const [rating, setRating] = React.useState(book.rating);
   const changeRating = (value: number) => {
-    setRating(value);
-    dispatch(updateRating(book.id, value));
+    if (user.uid === book.uid) {
+      let res = viewBooks.filter((result) => {
+        if (result.id === book.id) {
+          result.rating = value;
+        }
+        return result;
+      });
+      setViewBooks(res);
+      setRating(value);
+      dispatch(updateRating(book, value));
+    }
   };
   const bookDelete = (id) => {
+    let res = viewBooks.filter((result) => result?.id !== id);
+    setViewBooks(res);
     dispatch(deleteBook(book.id));
   };
+  const selectAuthor = (auth: string) => {
+    let res = viewBooks.filter((result) => result?.author === auth);
+    setViewBooks(res);
+    setAuthor(auth);
+  };
+
   return (
     <>
-      <ListItem.Swipeable
-        rightContent={
-          <Button
-            title="Delete"
-            icon={{ name: "delete", color: "white" }}
-            buttonStyle={{ minHeight: "100%", backgroundColor: "red" }}
-            onPress={() => bookDelete(book.id)}
-          />
-        }
-      >
+      <ListItem bottomDivider>
         <ListItem.Content>
-          <ListItem.Title
-            style={{
-              textAlign: "center",
-              marginHorizontal: 10,
-              display: "flex",
-            }}
+          <Stack
+            space={2}
+            direction={'row'}
+            style={{ justifyContent: 'space-between' }}
           >
-            <Text style={{ flex: 3, color: "#005EB8" }}>
-              Book: {book?.title}
-            </Text>
-          </ListItem.Title>
-          <ListItem.Subtitle style={{ marginLeft: 10, flex: 3, color: "grey" }}>
-            
-            <Link onPress={()=>{
-              setMoreBook(book?.author);
-            }} mt={4}>
-            By - {book?.author}
-      </Link>
-          </ListItem.Subtitle>
-          <ListItem.Subtitle style={{ marginHorizontal: 10, color: "#005EB8" }}>
-            <StarRating
-              disabled={false}
-              emptyStar={"ios-star-outline"}
-              fullStar={"ios-star"}
-              halfStar={"ios-star-half"}
-              iconSet={"Ionicons"}
-              maxStars={5}
-              rating={rating}
-              selectedStar={changeRating}
-              fullStarColor={"#005EB8"}
-            />
-          </ListItem.Subtitle>
+            <Stack space={2} direction={'column'}>
+              <Stack direction={'row'} alignItems="flex-start">
+                <ListItem.Title style={{ color: '#005EB8' }}>
+                  Book: {book?.title}
+                </ListItem.Title>
+
+                <ListItem.Subtitle style={{ marginLeft: 10, flex: 3 }}>
+                  <TouchableOpacity
+                    style={styles.author}
+                    onPress={() => {
+                      console.log(book?.author);
+                      selectAuthor(book?.author);
+                    }}
+                  >
+                    <Text style={{ color: 'grey' }}> by: {book?.author}</Text>
+                  </TouchableOpacity>
+                </ListItem.Subtitle>
+              </Stack>
+              <Stack direction={'row'} style={{ marginRight: 30 }}>
+                <StarRating
+                  style={{ height: 2 }}
+                  disabled={false}
+                  emptyStar={'ios-star-outline'}
+                  fullStar={'ios-star'}
+                  iconSet={'Ionicons'}
+                  maxStars={5}
+                  rating={rating}
+                  selectedStar={changeRating}
+                  fullStarColor={'#FFCC00'}
+                />
+              </Stack>
+            </Stack>
+            <Stack
+              space={2}
+              direction={'column'}
+              style={{ justifyContent: 'center' }}
+            >
+              {user?.uid === book?.uid ? (
+                <>
+                  <Button
+                    title=""
+                    icon={{ name: 'delete', color: 'red' }}
+                    buttonStyle={{
+                      backgroundColor: 'white',
+                      marginLeft: 40,
+                    }}
+                    onPress={() => bookDelete(book.id)}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
+            </Stack>
+          </Stack>
         </ListItem.Content>
-        <ListItem.Chevron />
-      </ListItem.Swipeable>
+        {/* <ListItem.Chevron /> */}
+      </ListItem>
       <Divider />
       {/* <Text>{book?.title}</Text> */}
     </>
@@ -73,4 +117,14 @@ const Book = ({ book,setMoreBook }) => {
 
 export default Book;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  author: {
+    // display: 'flex',
+
+    textAlign: 'center',
+    // margin: 20,
+    // padding: 10,
+    marginLeft: 5,
+    borderRadius: 8,
+  },
+});

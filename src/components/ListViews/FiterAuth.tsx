@@ -1,39 +1,59 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {
   Select,
   Divider,
   HStack,
   FormControl,
   Button,
-  
   Stack,
   Link,
-} from "native-base";
-import StarRating from "react-native-star-rating";
+} from 'native-base';
+import StarRating from 'react-native-star-rating';
 
 const FiterAuth = ({
   setFilterAuthor,
-  authors,
   filterAuthor,
-  searchAuthor,
-  setBooks,
-  books,
+  setViewBooks,
+  allbooks,
+  viewBooks,
+  setRating,
 }) => {
-  const [value, setValue] = React.useState(filterAuthor);
-  const [rating, setRating] = React.useState(0);
+  const [rating, setRating1] = React.useState(0);
   const changeRating = (value: number) => {
-    setRating(value);
-    const arr = books?.filter((book) => {
-      book.rating === value;
-    });
-    setBooks(arr);
+    // setRating(value);
+    // setRating1(value);
+    const arr = viewBooks.filter((book) => book.rating === value);
+    if (arr.length > 0) {
+      setViewBooks(arr);
+      setRating(value);
+      setRating1(value);
+    }
+    if (!arr.length) {
+      const arr2 = allbooks.filter((book) => book.rating === value);
+      if (arr2.length > 0) {
+        clearAll();
+        // setViewBooks(arr);
+        // setRating(value);
+        // setRating1(value);
+      } else {
+        clearAll();
+      }
+    }
+    console.log('Arr', arr);
+    console.log('viewBooks', viewBooks);
   };
+  const clearAll = () => {
+    setRating(0);
+    setRating1(0);
+    setFilterAuthor('');
+    setViewBooks(allbooks);
+  };
+
   return (
     <>
-      <Divider />
-      <Stack mx={4}>
-        <FormControl style={{ justifyContent: "center" }}>
+      <Stack mx={4} style={{ marginTop: 10, padding: 10, marginBottom: 10 }}>
+        <FormControl style={{ justifyContent: 'center' }}>
           {/* <FormControl.Label >Select Item</FormControl.Label>
         <Select
           p={2}
@@ -62,45 +82,42 @@ const FiterAuth = ({
             isAttached
             space={6}
             mx={{
-              base: "auto",
+              base: 'auto',
               md: 0,
             }}
           >
-            <Button colorScheme="teal" mr={2}>
-              {filterAuthor}
+            <Button colorScheme="blue" mr={2} variant="ghost">
+              {filterAuthor === '' ? 'All' : filterAuthor}
             </Button>
             <Button
               colorScheme="danger"
-              _text={{
-                color: "white",
-              }}
-              onPress={() => setFilterAuthor('All')}
+              variant="ghost"
+              onPress={() => clearAll()}
             >
-              Clear
+              Clear All
             </Button>
           </Button.Group>
         </FormControl>
-        <FormControl style={{ justifyContent: "center" }}>
+        <FormControl style={{ justifyContent: 'center' }}>
           <FormControl.Label>
             <>
               <Text>Book Rating: </Text>
-              <Text style={{ color: "#005EB8" }}>{rating}/5</Text>
+              <Text style={{ color: '#005EB8' }}>{rating}/5</Text>
             </>
           </FormControl.Label>
           <StarRating
             disabled={false}
-            emptyStar={"ios-star-outline"}
-            fullStar={"ios-star"}
-            halfStar={"ios-star-half"}
-            iconSet={"Ionicons"}
+            emptyStar={'ios-star-outline'}
+            fullStar={'ios-star'}
+            halfStar={'ios-star-half'}
+            iconSet={'Ionicons'}
             maxStars={5}
             rating={rating}
             selectedStar={changeRating}
-            fullStarColor={"#005EB8"}
+            fullStarColor={'#005EB8'}
           />
         </FormControl>
       </Stack>
-      <Divider />
     </>
   );
 };

@@ -10,11 +10,7 @@ export default (
   user: User = {
     id: '',
     uid: '',
-    success: false,
-    errorMessage: '',
-    errors: null,
     isAuthenticated: false,
-    authState: 0,
   },
   action: any
 ) => {
@@ -27,7 +23,10 @@ export default (
       user.uid = action.payload.uid;
       user.isAuthenticated = action.payload.isAuthenticated;
       return user;
-
+    case USER_AUTHENTICATION:
+      user.uid = action.payload.uid;
+      user.isAuthenticated = action.payload.isAuthenticated;
+      return user;
     default:
       return user;
   }
