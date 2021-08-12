@@ -18,23 +18,29 @@
 ``` markdown
 
 For the the first time if you open the app 
-  you will get Login Page
-  if you are new to the account
-  you should choose signIn
+  : For the very first Time it can take some time. So be patient.
+  : Once you will get Login Page 
+      => Login
+      =>  If you are new to the account
+      =>  You should choose signIn
   
-once you are logged In or Signed in 
-  => for every time you will be automatically get the actual Home Page 
-        => if home page doesn't have any data it will autometically show a spinner
+Once you are logged In or Signed in 
+  => For every time you will be automatically get the actual Home Page 
+        => If home page doesn't have any data it will autometically show a spinner
   
-        => you should add some books.
-              go to drawer-> add book
-                => in add book if your author is not mentioned you should choose add author
-                => now fill the form. and submit . you will automatically navigated to main page. 
-    main page->
+        => You should add some books.
+      
+              : Go to drawer-> add book
+    Add Page ->
+             Functionality:
+                  => In add book if your author is not mentioned you should choose add author
+                        => Type Name and Save.
+                  => Now fill the form. and submit . you will automatically navigated to main page. 
+    Main Page ->
            DML: here you can update rating or delete entry you have entered
-           view: 
+           View: 
                  1. You can see similar books written by the same writter
                  2. You can see books by by rating
-                      => if the number of rating it will show all books again 
+                      => If the number of rating it will show all books again 
 
 ```
